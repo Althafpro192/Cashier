@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 use App\Http\Controllers\HomeController;
@@ -33,38 +33,40 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RekapController;
 use App\Http\Controllers\SuperController;
 
-Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
-	Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
-	Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
-	Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
-	Route::post('/login', [LoginController::class, 'login'])->middleware('guest')->name('login.perform');
-	Route::get('/reset-password', [ResetPassword::class, 'show'])->middleware('guest')->name('reset-password');
-	Route::post('/reset-password', [ResetPassword::class, 'send'])->middleware('guest')->name('reset.perform');
-	Route::get('/change-password', [ChangePassword::class, 'show'])->middleware('guest')->name('change-password');
-	Route::post('/change-password', [ChangePassword::class, 'update'])->middleware('guest')->name('change.perform');
-	Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/', function () {
+	return redirect('/dashboard');
+})->middleware('auth');
+Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
+Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
+Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
+Route::post('/login', [LoginController::class, 'login'])->middleware('guest')->name('login.perform');
+Route::get('/reset-password', [ResetPassword::class, 'show'])->middleware('guest')->name('reset-password');
+Route::post('/reset-password', [ResetPassword::class, 'send'])->middleware('guest')->name('reset.perform');
+Route::get('/change-password', [ChangePassword::class, 'show'])->middleware('guest')->name('change-password');
+Route::post('/change-password', [ChangePassword::class, 'update'])->middleware('guest')->name('change.perform');
+Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('nota/{id}', [RekapController::class, 'nota'])->name('nota');
 
 	// SUPER ADMIN
-	Route::prefix('/super')->group(function() {
+	Route::prefix('/super')->group(function () {
 		Route::get('/users', [SuperController::class, 'users'])->name('users');
 		Route::get('/users/add', [SuperController::class, 'createUser'])->name('users.add');
 		Route::post('/users/doCreate', [SuperController::class, 'doCreateUser'])->name('users.doCreate');
 
 		Route::get('/tempat', [SuperController::class, 'tempat'])->name('tempat');
 	});
-	
+
 	// KATEGORI
-	Route::prefix('/kategori')->group(function() {
+	Route::prefix('/kategori')->group(function () {
 		Route::get('/list', [KategoriController::class, 'index'])->name('kategori');
 		Route::get('/add', [KategoriController::class, 'add'])->name('add');
 		Route::post('/do-create', [KategoriController::class, 'doCreate'])->name('doCreate');
 	});
 	// PRODUK
-	Route::prefix('/produk')->group(function() {
+	Route::prefix('/produk')->group(function () {
 		Route::get('/list', [ProdukController::class, 'index'])->name('produk');
 		Route::get('/add', [ProdukController::class, 'add'])->name('produk.add');
 		Route::get('/update/{id}', [ProdukController::class, 'update'])->name('produk.update');
@@ -74,7 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 
 	// PEGAWAI
-	Route::prefix('/pegawai')->group(function() {
+	Route::prefix('/pegawai')->group(function () {
 		Route::get('/list', [PegawaiController::class, 'index'])->name('pegawai');
 		Route::get('/add', [PegawaiController::class, 'add'])->name('pegawai.add');
 		Route::get('/update/{id}', [PegawaiController::class, 'update'])->name('pegawai.update');
@@ -84,7 +86,7 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 
 	// Pelanggan/Member
-	Route::prefix('/pelanggan')->group(function() {
+	Route::prefix('/pelanggan')->group(function () {
 		Route::get('/list', [PelangganController::class, 'index'])->name('pelanggan');
 		Route::get('/add', [PelangganController::class, 'add'])->name('pelanggan.add');
 		Route::get('/update/{id}', [PelangganController::class, 'update'])->name('pelanggan.update');
@@ -94,7 +96,7 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 
 	// REKAP PENJUALAN
-	Route::prefix('/rekap')->group(function() {
+	Route::prefix('/rekap')->group(function () {
 		Route::get('/list', [RekapController::class, 'index'])->name('rekap');
 		Route::get('/detail/{id}', [RekapController::class, 'detail'])->name('rekap.detail');
 		Route::get('/update/{id}', [RekapController::class, 'update'])->name('rekap.update');
@@ -103,26 +105,26 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('/do-create', [RekapController::class, 'doCreate'])->name('rekap.doCreate');
 		Route::get('/export-excel', [RekapController::class, 'exportExcel'])->name('exportExcel');
 	});
-	
+
 	// MEJA
-	Route::prefix('/meja')->group(function() {
+	Route::prefix('/meja')->group(function () {
 		Route::get('/index', [MejaController::class, 'index'])->name('meja');
 		Route::put('/meja/{id}', [MejaController::class, 'update'])->name('meja.update');
 	});
 
 	//PENJUALAN
-	Route::prefix('/penjualan')->group(function() {
+	Route::prefix('/penjualan')->group(function () {
 		Route::get('/index', [PenjualanController::class, 'index'])->name('penjualan');
 		Route::post('/add', [PenjualanController::class, 'store'])->name('penjualan.add');
 	});
 
-	Route::prefix('/profile')->group(function() {
+	Route::prefix('/profile')->group(function () {
 		Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	});
 
 	Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
 	Route::get('/sign-in-static', [PageController::class, 'signin'])->name('sign-in-static');
-	Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static'); 
+	Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static');
 	Route::get('/{page}', [PageController::class, 'index'])->name('page');
 	Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
